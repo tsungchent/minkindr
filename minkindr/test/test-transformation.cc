@@ -33,6 +33,10 @@
 #define TEST(a, b) int Test_##a##_##b()
 #endif
 
+#ifndef M_PI
+#define M_PI 3.1415926535897932384626433832795
+#endif
+
 typedef kindr::minimal::QuatTransformation Transformation;
 
 Eigen::Vector3d fromHomogeneous(const Eigen::Vector4d& v) {

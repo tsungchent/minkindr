@@ -1,7 +1,8 @@
 #include <kindr/minimal/rotation-quaternion.h>
-#include <numpy_eigen/boost_python_headers.hpp>
+#include <pybind11/pybind11.h>
+#include <pybind11/eigen.h>
+#include <pybind11/operators.h>
 
-using namespace boost::python;
 
 typedef kindr::minimal::RotationQuaternionTemplate<double> Quaternion;
 
@@ -42,34 +43,32 @@ void normalize(Quaternion& quaternion) {
   quaternion.normalize();
 }
 
-void exportRotationQuaternion() {
-  using namespace boost::python;
+void exportRotationQuaternion(pybind11::module& m) {
+    using namespace pybind11;
+    class_<Quaternion, std::shared_ptr<Quaternion>>(m, "Quaternion")
+        .def(init<>())
+        .def(init<const Eigen::Matrix3d&>())
+        .def(init<const double, const double, const double, const double>())
+        .def("w", &Quaternion::w)
+        .def("x", &Quaternion::x)
+        .def("y", &Quaternion::y)
+        .def("z", &Quaternion::z)
+        .def("getRotationMatrix", &Quaternion::getRotationMatrix)
+        .def("getQuaternionWXYZ", getQuaternionWXYZ)
+        .def("getQuaternionXYZW", getQuaternionXYZW)
+        .def("inverse", &Quaternion::inverse)
+        .def("getRotationVector", getRotationVector)
+        .def("normalize", normalize)
+        .def(self * self);
 
-  class_< Quaternion, boost::shared_ptr<Quaternion> >( "Quaternion", init<>() )
-    .def(init<const Eigen::Matrix3d&>())
-    .def(init<const double, const double, const double, const double>(
-        "Quaternion(w, x, y, z)"))
-    .def("w", &Quaternion::w)
-    .def("x", &Quaternion::x)
-    .def("y", &Quaternion::y)
-    .def("z", &Quaternion::z)
-    .def("getRotationMatrix", &Quaternion::getRotationMatrix)
-    .def("getQuaternionWXYZ", getQuaternionWXYZ)
-    .def("getQuaternionXYZW", getQuaternionXYZW)
-    .def("inverse", &Quaternion::inverse)
-    .def("getRotationVector", getRotationVector)
-    .def("normalize", normalize)
-    .def(self * self)
-    ;
-
-  def("createQuaternionFromXYZW", createQuaternionFromXYZW,
+  m.def("createQuaternionFromXYZW", createQuaternionFromXYZW,
       "Creates a Quaternion from a 4D vector [x,y,z,w].");
-  def("createQuaternionFromWXYZ", createQuaternionFromWXYZ,
+  m.def("createQuaternionFromWXYZ", createQuaternionFromWXYZ,
       "Creates a Quaternion from a 4D vector [w, x,y,z].");
-  def("createQuaternionFromApproximateRotationMatrix",
+  m.def("createQuaternionFromApproximateRotationMatrix",
       createQuaternionFromApproximateRotationMatrix,
       "Creates a quaternion from an (approximate) numpy 3x3 rotation matrix.");
-  def("createQuaternionFromRotationVectorRads",
+  m.def("createQuaternionFromRotationVectorRads",
       createQuaternionFromRotationVectorRads,
       "Creates a quaternion from a rotation vector [x, y, z] in radians.");
 }

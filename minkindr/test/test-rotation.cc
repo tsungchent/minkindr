@@ -32,6 +32,10 @@
 #define TEST(a, b) int Test_##a##_##b()
 #endif
 
+#ifndef M_PI
+#define M_PI 3.1415926535897932384626433832795
+#endif
+
 TEST(MinKindrTests,testQuatAxisAngle) {
   using namespace kindr::minimal;
   Eigen::Vector4d v(0.64491714, 0.26382416,  0.51605132,  0.49816637);

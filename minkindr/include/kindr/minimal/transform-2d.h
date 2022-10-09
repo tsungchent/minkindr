@@ -6,6 +6,8 @@
 #include <Eigen/Core>
 #include <Eigen/Geometry>
 
+#include "macros.h"
+
 namespace kindr {
 namespace minimal {
 

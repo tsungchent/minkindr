@@ -30,6 +30,8 @@
 #include <kindr/minimal/rotation-quaternion.h>
 #include <kindr/minimal/position.h>
 
+#include "macros.h"
+
 namespace kindr {
 namespace minimal {
 
@@ -165,7 +167,7 @@ class QuatTransformationTemplate {
   QuatTransformationTemplate<Scalar> inverse() const;
 
   /// \deprecated use inverse() instead.
-  QuatTransformationTemplate<Scalar> inverted() const __attribute__((deprecated));
+  attribute_deprecated QuatTransformationTemplate<Scalar> inverted() const;
 
   /// \brief check for binary equality.
   bool operator==(const QuatTransformationTemplate<Scalar>& rhs) const;

@@ -1,31 +1,31 @@
 #include <kindr/minimal/quat-transformation.h>
-#include <numpy_eigen/boost_python_headers.hpp>
-
-using namespace boost::python;
+#include <pybind11/pybind11.h>
+#include <pybind11/eigen.h>
+#include <pybind11/operators.h>
 
 using Transformation = kindr::minimal::QuatTransformationTemplate<double>;
 
 Eigen::Vector3d getPosition(const Transformation& transformation) {
-  return transformation.getPosition();
+	return transformation.getPosition();
 }
 
 Transformation::Rotation getRotation(const Transformation& transformation) {
-  return transformation.getRotation();
+	return transformation.getRotation();
 }
 
-void exportTransformation() {
-  using namespace boost::python;
+void exportTransformation(pybind11::module& m) {
+	using namespace pybind11;
+	class_< Transformation, std::shared_ptr<Transformation>>(m, "Transformation")
+		.def(init<>())
+		.def(init<const Eigen::Matrix4d&>())
+		.def(init<const Transformation::Rotation&, const Transformation::Position&>())
+		.def("getTransformationMatrix", &Transformation::getTransformationMatrix)
+		.def("getRotation", getRotation)
+		.def("getRotationMatrix", &Transformation::getRotationMatrix)
+		.def("getPosition", getPosition)
+		.def("inverse", &Transformation::inverse)
+		.def(self * self)
+		;
 
-  class_< Transformation, boost::shared_ptr<Transformation>>("Transformation", init<>())
-    .def(init<const Eigen::Matrix4d&>())
-    .def(init<const Transformation::Rotation&, const Transformation::Position&>())
-    .def("getTransformationMatrix", &Transformation::getTransformationMatrix)
-    .def("getRotation", getRotation)
-    .def("getRotationMatrix", &Transformation::getRotationMatrix)
-    .def("getPosition", getPosition)
-    .def("inverse", &Transformation::inverse)
-    .def(self * self)
-    ;
-
-  def("interpolateLinearly", &kindr::minimal::interpolateComponentwise<double>);
+	m.def("interpolateLinearly", &kindr::minimal::interpolateComponentwise<double>);
 }

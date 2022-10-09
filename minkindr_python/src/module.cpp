@@ -1,12 +1,12 @@
-#include <numpy_eigen/boost_python_headers.hpp>
-#include <boost/python/suite/indexing/vector_indexing_suite.hpp>
-using namespace boost::python;
+// #include <numpy_eigen/boost_python_headers.hpp>
+// #include <boost/python/suite/indexing/vector_indexing_suite.hpp>
+#include <pybind11/pybind11.h>
 
-void exportRotationQuaternion();
-void exportTransformation();
+void exportRotationQuaternion(pybind11::module& m);
+void exportTransformation(pybind11::module& m);
 
-BOOST_PYTHON_MODULE(libminkindr_python)
+PYBIND11_MODULE(minkindr_python, m)
 {
-  exportRotationQuaternion();
-  exportTransformation();
+  exportRotationQuaternion(m);
+  exportTransformation(m);
 }

@@ -29,6 +29,8 @@
 
 #include <Eigen/Dense>
 
+#include "macros.h"
+
 namespace kindr {
 namespace minimal {
 
@@ -117,7 +119,7 @@ class AngleAxisTemplate {
   AngleAxisTemplate<Scalar> inverse() const;
 
   /// \deprecated use inverse() instead.
-  AngleAxisTemplate<Scalar> inverted() const __attribute__((deprecated));
+  attribute_deprecated AngleAxisTemplate<Scalar> inverted() const;
 
   /// \brief rotate a vector, v.
   Vector3 rotate(const Vector3& v) const;

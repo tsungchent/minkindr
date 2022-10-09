@@ -29,6 +29,8 @@
 
 #include <Eigen/Dense>
 
+#include "macros.h"
+
 namespace kindr {
 namespace minimal {
 
@@ -135,7 +137,7 @@ class RotationQuaternionTemplate {
   RotationQuaternionTemplate<Scalar> inverse() const;
 
   /// \deprecated use inverse instead.
-  RotationQuaternionTemplate<Scalar> inverted() const __attribute__((deprecated));
+  attribute_deprecated RotationQuaternionTemplate<Scalar> inverted() const;
 
   /// \brief get a copy of the conjugate of the quaternion.
   RotationQuaternionTemplate<Scalar> conjugated() const;
